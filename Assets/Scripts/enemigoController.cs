@@ -13,7 +13,7 @@ public class enemigoController : MonoBehaviour
     private Vector3 PosicionPatrulla;
     private bool encontrado;
 
-    private int vida = 10;
+    private int vida = 3;
 
     private void Awake()
     {
@@ -78,7 +78,7 @@ public class enemigoController : MonoBehaviour
             {
                 nv.ResetPath();
                 StopAllCoroutines();
-                StartCoroutine("perseguir");
+                StartCoroutine("acercarse");
                 break;
             }
 
@@ -94,7 +94,7 @@ public class enemigoController : MonoBehaviour
 
     }
 
-    IEnumerator perseguir()
+    IEnumerator acercarse()
     {
 
         while (true)
@@ -105,11 +105,14 @@ public class enemigoController : MonoBehaviour
             {
                 nv.SetDestination(PosicionObjetivo);
 
-                if (Vector3.Distance(transform.position, PosicionObjetivo) < 5.0f)
+                RaycastHit hit;
+
+                if (Physics.Raycast(detectorComida.transform.position, detectorComida.transform.forward, out hit, 1))
                 {
+                    Debug.DrawRay(detectorComida.transform.position, detectorComida.transform.forward * hit.distance, Color.green);
                     nv.ResetPath();
                     StopAllCoroutines();
-                    //StartCoroutine("disparar");
+                    StartCoroutine("comer", hit.transform.gameObject);
                     break;
                 }
             }
@@ -123,7 +126,17 @@ public class enemigoController : MonoBehaviour
         }
     }
 
-    IEnumerator buscar()
+    IEnumerator comer(GameObject objetivo)
+    {
+        yield return new WaitForSeconds(1);
+        Destroy(objetivo);
+        StopAllCoroutines();
+        StartCoroutine("buscar");
+    }
+
+        //TODO: Al ver enemigo huir
+
+        IEnumerator buscar()
     {
 
         float rotacion = 0;
@@ -146,7 +159,7 @@ public class enemigoController : MonoBehaviour
         {
             nv.ResetPath();
             StopAllCoroutines();
-            StartCoroutine("perseguir");
+            StartCoroutine("acercarse");
         }
         else
         {
