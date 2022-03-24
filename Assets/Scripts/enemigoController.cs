@@ -109,10 +109,17 @@ public class enemigoController : MonoBehaviour
 
                 if (Physics.Raycast(detectorComida.transform.position, detectorComida.transform.forward, out hit, 1))
                 {
-                    Debug.DrawRay(detectorComida.transform.position, detectorComida.transform.forward * hit.distance, Color.green);
                     nv.ResetPath();
                     StopAllCoroutines();
-                    StartCoroutine("comer", hit.transform.gameObject);
+                    if (hit.transform.gameObject.tag == "comida")
+                    {
+                        StartCoroutine("comer", hit.transform.gameObject);
+                    }
+                    else 
+                    {
+                        StartCoroutine("buscar");
+                    }
+                    
                     break;
                 }
             }
@@ -136,7 +143,7 @@ public class enemigoController : MonoBehaviour
 
         //TODO: Al ver enemigo huir
 
-        IEnumerator buscar()
+    IEnumerator buscar()
     {
 
         float rotacion = 0;

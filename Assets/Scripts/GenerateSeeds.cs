@@ -6,6 +6,8 @@ public class GenerateSeeds : MonoBehaviour
 {
     public GameObject seed;
     private GameObject flower;
+    public ParticleSystem explosion;
+    public ParticleSystem muerte;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,7 +21,8 @@ public class GenerateSeeds : MonoBehaviour
     {
         while(true)
         {
-            yield return new WaitForSeconds(5.0f);
+            float tiempo = Random.Range(3f, 6f);
+            yield return new WaitForSeconds(tiempo);
 
             if (GameObject.FindGameObjectsWithTag("comida").Length < 50)
             {
@@ -33,7 +36,7 @@ public class GenerateSeeds : MonoBehaviour
                 Vector3 rFinal = new Vector3(rX, 0, rZ);
 
                 s.transform.rotation = Quaternion.Euler(rFinal);
-
+                explosion.Play();
                 s.GetComponent<Rigidbody>().AddForce(s.transform.up * speed);
             }
             
@@ -43,8 +46,10 @@ public class GenerateSeeds : MonoBehaviour
 
     IEnumerator killTree()
     {
-        yield return new WaitForSeconds(11.0f);
+        float tiempo = Random.Range(8f, 12f);
+        yield return new WaitForSeconds(tiempo);
         Destroy(this.gameObject);
+        Instantiate(muerte, this.transform.position, Quaternion.identity);
     }
 
 }

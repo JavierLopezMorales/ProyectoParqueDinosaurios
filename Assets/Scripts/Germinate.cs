@@ -9,7 +9,8 @@ public class Germinate : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Invoke("germ", 5.0f);
+        float tiempo = Random.Range(3f, 6f);
+        Invoke("germ", tiempo);
     }
     private void germ()
     {
